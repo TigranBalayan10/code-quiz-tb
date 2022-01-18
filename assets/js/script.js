@@ -10,7 +10,6 @@ var startGameButtonHandler = function (event) {
         showQuestions();
     }
 };
-
 // showQuestions in container and remove welcome massege
 var showQuestions = function (atIndex = 0) {
     // Set current question
@@ -29,8 +28,9 @@ var showQuestions = function (atIndex = 0) {
     for (let i = 0; i < currentQuestion.answers.length; i++) {
         // create buttons for answers
         var answersEl = document.createElement('button');
+        answersEl.className = 'btn'
         // add functionality to answer buttons
-        answersEl.addEventListener('click', () => {
+        answersEl.addEventListener('click', function() {
             // when no questions left in array return to highscore
             if (atIndex === questions.length - 1) {
                 showHighscore();
@@ -46,6 +46,7 @@ var showQuestions = function (atIndex = 0) {
             if (currentQuestion.answers[i].correct) {
                 wrongCorrectEl.innerText = 'Correct!';
             } else {
+                timeLeft -= 10;
                 wrongCorrectEl.innerText = 'Wrong!';
             }
             // append appropriate text
@@ -60,10 +61,12 @@ var showQuestions = function (atIndex = 0) {
     container.appendChild(questionEl);
 };
 
+var score;
 // create high score 
-function showHighscore() {
+var showHighscore =  function () {
     if (timeInterval) {
         clearInterval(timeInterval);
+        score = timeLeft;
     }
 }
 
