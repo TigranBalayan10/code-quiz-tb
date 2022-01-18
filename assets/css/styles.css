@@ -47,6 +47,14 @@ main {
     padding: 0;
 }
 
+.container {
+    width: 800px;
+    max-width: 80%;
+    background-color: whitesmoke;
+    border-radius: 5px;
+    padding: 10px;
+}
+
 .welcome {
     display: flex;
     justify-content: center;

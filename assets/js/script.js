@@ -1,5 +1,6 @@
 var timerEl = document.getElementById('countdown');
 var container = document.getElementById('main-container');
+container.className = 'container';
 
 // startGame button
 var startGameButtonHandler = function (event) {
@@ -10,10 +11,14 @@ var startGameButtonHandler = function (event) {
         showQuestions();
     }
 };
+// shuffle questions
+
 // showQuestions in container and remove welcome massege
 var showQuestions = function (atIndex = 0) {
+    var shuffledQusetion;
+    shuffledQusetion = questions.sort(() => Math.random() - 0.5)
     // Set current question
-    var currentQuestion = questions[atIndex];
+    var currentQuestion = shuffledQusetion[atIndex];
     // clear container
     document.getElementById('main-container').innerHTML = '';
     // create new div for questions
@@ -30,7 +35,7 @@ var showQuestions = function (atIndex = 0) {
         var answersEl = document.createElement('button');
         answersEl.className = 'btn'
         // add functionality to answer buttons
-        answersEl.addEventListener('click', function() {
+        answersEl.addEventListener('click', function () {
             // when no questions left in array return to highscore
             if (atIndex === questions.length - 1) {
                 showHighscore();
@@ -63,7 +68,7 @@ var showQuestions = function (atIndex = 0) {
 
 var score;
 // create high score 
-var showHighscore =  function () {
+var showHighscore = function () {
     if (timeInterval) {
         clearInterval(timeInterval);
         score = timeLeft;
@@ -94,21 +99,93 @@ var questions = [
         question:
             'The web development environment (JavaScript) offers which standard construct for data validation of the input entered by the user.',
         answers: [
-            { text: 'Permit server-side', correct: false },
-            { text: 'Controlled loop constructs', correct: true },
-            { text: 'Client side Event', correct: false },
-            { text: 'Server page access', correct: false },
+            { text: '1. Permit server-side', correct: false },
+            { text: '2. Controlled loop constructs', correct: true },
+            { text: '3. Client side Event', correct: false },
+            { text: '4. Server page access', correct: false },
         ],
     },
     {
         question: 'The script tag must be placed in __________',
         answers: [
-            { text: 'After the body tag', correct: false },
-            { text: 'the head tag', correct: false },
-            { text: 'the title or head', correct: false },
-            { text: 'the head or body', correct: true },
+            { text: '1. After the body tag', correct: false },
+            { text: '2. the head tag', correct: false },
+            { text: '3. the title or head', correct: false },
+            { text: '4. the head or body', correct: true },
         ],
     },
+    {
+        question: '______ tag is an extension to HTML that can enclose any number of JavaScript statements.',
+        answers: [
+            { text: '1. <SCRIPT>', correct: true },
+            { text: '2. <BODY>', correct: false },
+            { text: '3. <HEAD>', correct: false },
+            { text: '4. <TITLE>', correct: false },
+        ],
+    },
+    {
+        question: 'Which of the following is not considered a JavaScript operator?',
+        answers: [
+            { text: '1. new', correct: false },
+            { text: '2. this', correct: true },
+            { text: '3. delete', correct: false },
+            { text: '4. typeof', correct: false },
+        ],
+    },
+    {
+        question: 'Using _______ statement is how you test for a specific condition.',
+        answers: [
+            { text: '1. Select', correct: false },
+            { text: '2. If', correct: true },
+            { text: '3. Switch', correct: false },
+            { text: '4. For', correct: false },
+        ],
+    },
+    {
+        question: 'The _______ method of an Array object adds and/or removes elements from an array.',
+        answers: [
+            { text: '1. Reverse', correct: false },
+            { text: '2. Shift', correct: false },
+            { text: '3. Slice', correct: true },
+            { text: '4. Splice', correct: false },
+        ],
+    },
+    {
+        question: 'JavaScript entities start with _______ and end with _________.',
+        answers: [
+            { text: '1. Semicolon, colon', correct: false },
+            { text: '2. Semicolon, Ampersand', correct: false },
+            { text: '3. Ampersand, colon', correct: false },
+            { text: '4. Ampersand, semicolon', correct: true },
+        ],
+    },
+    {
+        question: '<script type="text/javascript"> x=4+"4" document.write(x) </script>. Output------?',
+        answers: [
+            { text: '1. 44', correct: true },
+            { text: '2. 8', correct: false },
+            { text: '3. 4', correct: false },
+            { text: '4. Error output', correct: false },
+        ],
+    },
+    {
+        question: 'Which of the following is the structure of an if statement?',
+        answers: [
+            { text: '1. if (conditional expression is true) thenexecute this codeend if', correct: false },
+            { text: '2. if (conditional expression is true)execute this codeend if', correct: false },
+            { text: '3. if (conditional expression is true)   {then execute this code>->}', correct: true },
+            { text: '4. if (conditional expression is true) then {execute this code}', correct: false },
+        ],
+    },
+    {
+        question: 'What is the correct syntax for referring to an external script called " abc.js"?',
+        answers: [
+            { text: '1. <script href=" abc.js">', correct: false },
+            { text: '2. <script name=" abc.js">', correct: false },
+            { text: '3. <script src=" abc.js">', correct: true },
+            { text: '4. None of the above', correct: false },
+        ],
+    }
 ];
 
 container.addEventListener('click', startGameButtonHandler);
