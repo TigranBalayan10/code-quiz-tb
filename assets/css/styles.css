@@ -89,7 +89,8 @@ main {
     font-size: 24px;
 }
 
-.btn:hover {
+.btn:hover,
+.high-score-submit:hover {
     background-color: var(--secondary);
     cursor: pointer;
 }
@@ -115,4 +116,18 @@ main {
     font-size: 25px;
     color: grey;
     border-top: 2px solid;
+}
+
+.high-score-done form, .high-score-done p {
+    font-weight: bold;
+}
+
+.high-score-submit {
+    background-color: var(--primary);
+    outline: none;
+    border: none;
+    padding: 7px 11px;
+    border-radius: 9px;
+    color: whitesmoke;
+    font-size: 14px;
 }

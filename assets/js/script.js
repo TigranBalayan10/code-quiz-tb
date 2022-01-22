@@ -11,16 +11,12 @@ var startGameButtonHandler = function (event) {
         showQuestions();
     }
 };
-// shuffle questions
 
 // showQuestions in container and remove welcome massege
 var showQuestions = function (atIndex = 0) {
-    var shuffledQusetion;
-    shuffledQusetion = questions.sort(() => Math.random() - 0.5)
-    // Set current question
-    var currentQuestion = shuffledQusetion[atIndex];
+    var currentQuestion = questions[atIndex];
     // clear container
-    document.getElementById('main-container').innerHTML = '';
+    container.innerHTML = '';
     // create new div for questions
     var questionEl = document.createElement('div');
     questionEl.className = 'question';
@@ -33,7 +29,7 @@ var showQuestions = function (atIndex = 0) {
     for (let i = 0; i < currentQuestion.answers.length; i++) {
         // create buttons for answers
         var answersEl = document.createElement('button');
-        answersEl.className = 'btn'
+        answersEl.className = 'btn';
         // add functionality to answer buttons
         answersEl.addEventListener('click', function () {
             // when no questions left in array return to highscore
@@ -69,10 +65,42 @@ var showQuestions = function (atIndex = 0) {
 var score;
 // create high score 
 var showHighscore = function () {
+
     if (timeInterval) {
         clearInterval(timeInterval);
         score = timeLeft;
     }
+
+    container.innerHTML = '';
+
+    var highScoreEl = document.createElement('div');
+    highScoreEl.className = 'high-score-done';
+    var highScoreH2 = document.createElement('h2');
+    highScoreH2.innerText = 'All Done!';
+    var highScoreNum = document.createElement('p')
+    highScoreNum.innerText = 'Your final score is  ' + score;
+    var highScoreInitials = document.createElement('form');
+    var highScoreLabelEl = document.createElement('label');
+    highScoreLabelEl.innerText = 'Enter Initials: '
+    var highScoreInputEl = document.createElement('input');
+    highScoreInputEl.type = 'text';
+    highScoreInputEl.value - '';
+    var highScoreSubmitEl = document.createElement('button');
+    highScoreSubmitEl.innerText = 'Submit'
+    highScoreSubmitEl.className = 'high-score-submit';
+    highScoreSubmitEl.setAttribute('id', 'submit-button');
+
+    container.appendChild(highScoreEl);
+    highScoreEl.appendChild(highScoreH2);
+    highScoreEl.appendChild(highScoreNum);
+    highScoreEl.appendChild(highScoreInitials);
+    highScoreInitials.appendChild(highScoreLabelEl);
+    highScoreInitials.appendChild(highScoreInputEl);
+    highScoreInitials.appendChild(highScoreSubmitEl);
+    
+    document.getElementById("submit-button").onclick = function () {
+        location.href = 'high-score.html';
+    };
 }
 
 var timeLeft = 75;
