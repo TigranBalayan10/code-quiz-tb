@@ -131,3 +131,9 @@ main {
     color: whitesmoke;
     font-size: 14px;
 }
+
+.high-scores-list {
+    background-color: #ccccff;
+    font-weight: bold;
+    line-height: 1.8;
+}

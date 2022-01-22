@@ -37,17 +37,21 @@ var showQuestions = function (atIndex = 0) {
                 showHighscore();
                 return;
             }
-            // when clicked on answers continue to next question 
+            // when clicked on answers continue to next question
             var nextIndex = atIndex + 1;
             showQuestions(nextIndex);
             // add wrong or correct outside container
             var wrongCorrectEl = document.createElement('p');
-            wrongCorrectEl.className = "wrong-correct";
+            wrongCorrectEl.className = 'wrong-correct';
             // add text at the bottom, when wrong-wrong, when correct-correct
             if (currentQuestion.answers[i].correct) {
                 wrongCorrectEl.innerText = 'Correct!';
             } else {
                 timeLeft -= 10;
+                if (timeLeft <= 0) {
+                    timeLeft = 0;
+                    showHighscore();
+                }
                 wrongCorrectEl.innerText = 'Wrong!';
             }
             // append appropriate text
@@ -63,50 +67,78 @@ var showQuestions = function (atIndex = 0) {
 };
 
 var score;
-// create high score 
+// create high score
 var showHighscore = function () {
-
-    if (timeInterval) {
-        clearInterval(timeInterval);
-        score = timeLeft;
-    }
-
+    score = timeLeft;
     container.innerHTML = '';
 
     var highScoreEl = document.createElement('div');
     highScoreEl.className = 'high-score-done';
     var highScoreH2 = document.createElement('h2');
     highScoreH2.innerText = 'All Done!';
-    var highScoreNum = document.createElement('p')
+    var highScoreNum = document.createElement('p');
     highScoreNum.innerText = 'Your final score is  ' + score;
-    var highScoreInitials = document.createElement('form');
+    var highScoreForm = document.createElement('form');
     var highScoreLabelEl = document.createElement('label');
-    highScoreLabelEl.innerText = 'Enter Initials: '
+    highScoreLabelEl.innerText = 'Enter Initials: ';
     var highScoreInputEl = document.createElement('input');
     highScoreInputEl.type = 'text';
-    highScoreInputEl.value - '';
-    var highScoreSubmitEl = document.createElement('button');
-    highScoreSubmitEl.innerText = 'Submit'
+    highScoreInputEl.value = '';
+    var highScoreSubmitEl = document.createElement('a');
+    highScoreSubmitEl.innerText = 'Submit';
     highScoreSubmitEl.className = 'high-score-submit';
     highScoreSubmitEl.setAttribute('id', 'submit-button');
+    highScoreSubmitEl.setAttribute('href', './high-score.html');
+    highScoreSubmitEl.addEventListener('click', (event) => {
+        // check if the initials are not valid
+        if (!isValidInput(highScoreInputEl.value)) {
+            event.preventDefault();
+            highScoreInputEl.value = '';
+            alert('Please input valid initials');
+            return;
+        }
+
+        var currentScoreObject = {
+            score: score,
+            initials: highScoreInputEl.value
+        };
+
+        var currentHighscores = localStorage.getItem('highscores');
+        if (currentHighscores) {
+            var currentHighscoresArray = JSON.parse(currentHighscores);
+            currentHighscoresArray.push(currentScoreObject);
+            localStorage.setItem(
+                'highscores',
+                JSON.stringify(currentHighscoresArray)
+            );
+        } else {
+            var toAdd = [currentScoreObject];
+            localStorage.setItem('highscores', JSON.stringify(toAdd));
+        }
+    });
 
     container.appendChild(highScoreEl);
     highScoreEl.appendChild(highScoreH2);
     highScoreEl.appendChild(highScoreNum);
-    highScoreEl.appendChild(highScoreInitials);
-    highScoreInitials.appendChild(highScoreLabelEl);
-    highScoreInitials.appendChild(highScoreInputEl);
-    highScoreInitials.appendChild(highScoreSubmitEl);
-    
-    document.getElementById("submit-button").onclick = function () {
-        location.href = 'high-score.html';
-    };
-}
+    highScoreEl.appendChild(highScoreForm);
+    highScoreForm.appendChild(highScoreLabelEl);
+    highScoreForm.appendChild(highScoreInputEl);
+    highScoreForm.appendChild(highScoreSubmitEl);
+};
+
+
+function isValidInput() {
+    var highScoreValue = highScoreInputEl.value
+    if (highScoreValue.match('YY')) {
+        showHighscore();
+        return true;
+    }
+};
 
 var timeLeft = 75;
-var timeInterval;
 function countdown() {
-    timeInterval = setInterval(function () {
+    timerEl.textContent = 'Time: ' + timeLeft;
+    var timeInterval = setInterval(function () {
         // As long as the `timeLeft` is greater than 0
         if (timeLeft > 0) {
             // Set the `textContent` of `timerEl` to show the remaining seconds
@@ -118,6 +150,7 @@ function countdown() {
             timerEl.textContent = 'Time: 0';
             // Use `clearInterval()` to stop the timer
             clearInterval(timeInterval);
+            showHighscore();
         }
     }, 1000);
 }
@@ -143,7 +176,8 @@ var questions = [
         ],
     },
     {
-        question: '______ tag is an extension to HTML that can enclose any number of JavaScript statements.',
+        question:
+            '______ tag is an extension to HTML that can enclose any number of JavaScript statements.',
         answers: [
             { text: '1. <SCRIPT>', correct: true },
             { text: '2. <BODY>', correct: false },
@@ -161,7 +195,8 @@ var questions = [
         ],
     },
     {
-        question: 'Using _______ statement is how you test for a specific condition.',
+        question:
+            'Using _______ statement is how you test for a specific condition.',
         answers: [
             { text: '1. Select', correct: false },
             { text: '2. If', correct: true },
@@ -170,7 +205,8 @@ var questions = [
         ],
     },
     {
-        question: 'The _______ method of an Array object adds and/or removes elements from an array.',
+        question:
+            'The _______ method of an Array object adds and/or removes elements from an array.',
         answers: [
             { text: '1. Reverse', correct: false },
             { text: '2. Shift', correct: false },
@@ -188,7 +224,8 @@ var questions = [
         ],
     },
     {
-        question: '<script type="text/javascript"> x=4+"4" document.write(x) </script>. Output------?',
+        question:
+            '<script type="text/javascript"> x=4+"4" document.write(x) </script>. Output------?',
         answers: [
             { text: '1. 44', correct: true },
             { text: '2. 8', correct: false },
@@ -199,21 +236,34 @@ var questions = [
     {
         question: 'Which of the following is the structure of an if statement?',
         answers: [
-            { text: '1. if (conditional expression is true) thenexecute this codeend if', correct: false },
-            { text: '2. if (conditional expression is true)execute this codeend if', correct: false },
-            { text: '3. if (conditional expression is true)   {then execute this code>->}', correct: true },
-            { text: '4. if (conditional expression is true) then {execute this code}', correct: false },
+            {
+                text: '1. if (conditional expression is true) thenexecute this codeend if',
+                correct: false,
+            },
+            {
+                text: '2. if (conditional expression is true)execute this codeend if',
+                correct: false,
+            },
+            {
+                text: '3. if (conditional expression is true)   {then execute this code>->}',
+                correct: true,
+            },
+            {
+                text: '4. if (conditional expression is true) then {execute this code}',
+                correct: false,
+            },
         ],
     },
     {
-        question: 'What is the correct syntax for referring to an external script called " abc.js"?',
+        question:
+            'What is the correct syntax for referring to an external script called " abc.js"?',
         answers: [
             { text: '1. <script href=" abc.js">', correct: false },
             { text: '2. <script name=" abc.js">', correct: false },
             { text: '3. <script src=" abc.js">', correct: true },
             { text: '4. None of the above', correct: false },
         ],
-    }
+    },
 ];
 
 container.addEventListener('click', startGameButtonHandler);
