@@ -1,4 +1,4 @@
-# Password Generator
+# Quiz for Web Developers
 
 ## Screenshot
 ![Mockup Screenshot](./QuizMockup.jpg)
