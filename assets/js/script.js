@@ -69,9 +69,15 @@ var showQuestions = function (atIndex = 0) {
 var score;
 // create high score
 var showHighscore = function () {
-    score = timeLeft;
-    container.innerHTML = '';
+    // set time left as a score
+    if (timeInterval) {
+        clearInterval(timeInterval);
+        score = timeLeft +1;
+    }
 
+    //clear page to create new elements 
+    container.innerHTML = '';
+    // create new elements for the page match mockup
     var highScoreEl = document.createElement('div');
     highScoreEl.className = 'high-score-done';
     var highScoreH2 = document.createElement('h2');
@@ -89,34 +95,30 @@ var showHighscore = function () {
     highScoreSubmitEl.className = 'high-score-submit';
     highScoreSubmitEl.setAttribute('id', 'submit-button');
     highScoreSubmitEl.setAttribute('href', './high-score.html');
-    highScoreSubmitEl.addEventListener('click', (event) => {
-        // check if the initials are not valid
-        if (!isValidInput(highScoreInputEl.value)) {
-            event.preventDefault();
-            highScoreInputEl.value = '';
-            alert('Please input valid initials');
-            return;
-        }
-
+    // add score and initials to local storage after clicking submit
+    highScoreSubmitEl.addEventListener('click', () => {
+        //make array of object to store
         var currentScoreObject = {
             score: score,
             initials: highScoreInputEl.value
         };
-
+        //get items form local storage
         var currentHighscores = localStorage.getItem('highscores');
+        // add current score to existing array
         if (currentHighscores) {
+            // make it object to add to array
             var currentHighscoresArray = JSON.parse(currentHighscores);
+            // add to array
             currentHighscoresArray.push(currentScoreObject);
-            localStorage.setItem(
-                'highscores',
-                JSON.stringify(currentHighscoresArray)
-            );
+            // make it strings to store in local storage
+            localStorage.setItem('highscores',JSON.stringify(currentHighscoresArray));
         } else {
+            // if nothing added to array set to string for local storage
             var toAdd = [currentScoreObject];
             localStorage.setItem('highscores', JSON.stringify(toAdd));
         }
     });
-
+    // add elements to the page
     container.appendChild(highScoreEl);
     highScoreEl.appendChild(highScoreH2);
     highScoreEl.appendChild(highScoreNum);
@@ -125,27 +127,20 @@ var showHighscore = function () {
     highScoreForm.appendChild(highScoreInputEl);
     highScoreForm.appendChild(highScoreSubmitEl);
 };
-
-
-function isValidInput() {
-    var highScoreValue = highScoreInputEl.value
-    if (highScoreValue.match('YY')) {
-        showHighscore();
-        return true;
-    }
-};
-
+// timer left for quiz
 var timeLeft = 75;
+var timeInterval;
+//countdown from the value to 0
 function countdown() {
-    timerEl.textContent = 'Time: ' + timeLeft;
-    var timeInterval = setInterval(function () {
+    timeInterval = setInterval(function () {
         // As long as the `timeLeft` is greater than 0
         if (timeLeft > 0) {
             // Set the `textContent` of `timerEl` to show the remaining seconds
             timerEl.textContent = 'Time: ' + timeLeft;
             // Decrement `timeLeft` by 1
             timeLeft--;
-        } else {
+        }
+        else {
             // Once `timeLeft` gets to 0, set `timerEl` to an empty string
             timerEl.textContent = 'Time: 0';
             // Use `clearInterval()` to stop the timer
